@@ -1,45 +1,78 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://shaamgutters.ca/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://shaamgutters.ca/gutter-replacement.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shaamgutters.ca/gutter-cleaning.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://shaamgutters.ca/soffit.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://shaamgutters.ca/fascia.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://shaamgutters.ca/siding.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shaamgutters.ca/roofing.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/siding.html</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/soffit.html</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/fascia.html</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/gutter-installation/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/gutter-cleaning/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/roofing/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/siding/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/soffit/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/calgary/fascia/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/gutter-installation/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/gutter-cleaning/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/roofing/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/siding/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/soffit/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/regina/fascia/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/services/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/about/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/contractors/</loc>
+  </url>
+  <url>
+    <loc>https://shaamgutters.ca/contact/</loc>
   </url>
 </urlset>
