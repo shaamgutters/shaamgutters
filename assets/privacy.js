@@ -5,7 +5,7 @@
   const configured = config.enabled === true && /^G-[A-Z0-9]{6,20}$/.test(id);
   const production = location.protocol === 'https:' && ['shaamgutters.ca', 'www.shaamgutters.ca'].includes(location.hostname);
   const enabled = configured && production;
-  const key = 'shaam.analytics-choice.v1';
+  const key = 'shaam.analytics-choice.v2';
   const lifetime = 180 * 24 * 60 * 60 * 1000;
   const banner = document.getElementById('analytics-banner');
   const dialog = document.getElementById('privacy-dialog');
@@ -17,6 +17,12 @@
   const trackable = Boolean(canonicalURL && canonicalURL.hostname === 'shaamgutters.ca' && !(robots && /noindex/i.test(robots.content)));
   const cleanURL = canonicalURL ? canonicalURL.href : '';
   const actions = new Set(['quote_form_open', 'phone_click', 'email_click']);
+  const quoteLinks = Array.from(document.querySelectorAll('a[data-action="quote_form_open"]'));
+  const quoteBase = new Map(quoteLinks.map(link => [link, link.href]));
+  const referenceEntry = 'entry.1379403889';
+  let quoteIdentity = null;
+  let identityPending = false;
+  let identityGeneration = 0;
   let choice = null;
   let started = false;
   let loadFailed = false;
@@ -27,7 +33,7 @@
     try {
       const data = JSON.parse(localStorage.getItem(key) || 'null');
       const now = Date.now();
-      if (data && data.version === 1 && data.measurementId === id &&
+      if (data && data.version === 2 && data.measurementId === id &&
           ['granted', 'denied'].includes(data.choice) && Number.isFinite(data.expires) &&
           data.expires > now && data.expires <= now + lifetime + 60000) return data.choice;
     } catch (_) { /* Unavailable or corrupt storage leaves optional analytics off. */ }
@@ -36,7 +42,7 @@
 
   function remember(next) {
     try {
-      localStorage.setItem(key, JSON.stringify({version: 1, measurementId: id, choice: next, expires: Date.now() + lifetime}));
+      localStorage.setItem(key, JSON.stringify({version: 2, measurementId: id, choice: next, expires: Date.now() + lifetime}));
       storageWorked = true;
     } catch (_) { storageWorked = false; }
   }
@@ -98,6 +104,75 @@
     return fields;
   }
 
+  function clearQuoteReferences() {
+    quoteIdentity = null;
+    identityPending = false;
+    identityGeneration++;
+    quoteLinks.forEach(link => { link.href = quoteBase.get(link); });
+  }
+
+  function updateQuoteReferences() {
+    const allowed = enabled && choice === 'granted' && started && trackable && !loadFailed;
+    const fresh = quoteIdentity && Date.now() - quoteIdentity.received < 60000;
+    quoteLinks.forEach(link => {
+      const url = new URL(quoteBase.get(link));
+      if (allowed && fresh && window.crypto && window.crypto.getRandomValues) {
+        const nonce = Array.from(window.crypto.getRandomValues(new Uint8Array(16)))
+          .map(value => value.toString(16).padStart(2, '0')).join('');
+        const mode = new URLSearchParams(location.search).get('quote_tracking_test') === '1' ? 'test' : 'live';
+        url.searchParams.set('usp', 'pp_url');
+        url.searchParams.set(referenceEntry, ['SG1', quoteIdentity.client, quoteIdentity.session,
+          Date.now(), nonce, mode].join('|'));
+      }
+      link.href = url.href;
+    });
+  }
+
+  function prepareQuoteReferences() {
+    if (!enabled || choice !== 'granted' || !started || !trackable || loadFailed || identityPending) return;
+    identityPending = true;
+    const generation = ++identityGeneration;
+    // Ignore delayed callbacks after withdrawal or a timed-out request.
+    const timeout = setTimeout(() => {
+      if (generation === identityGeneration) { identityPending = false; identityGeneration++; }
+    }, 3000);
+    window.gtag('get', id, 'client_id', client => {
+      if (generation !== identityGeneration || choice !== 'granted') return;
+      window.gtag('get', id, 'session_id', session => {
+        if (generation !== identityGeneration || choice !== 'granted') return;
+        clearTimeout(timeout);
+        identityPending = false;
+        const now = Date.now();
+        const sessionNumber = Number(session);
+        if (!/^\d{1,20}\.\d{1,20}$/.test(String(client)) ||
+            !/^\d{1,13}$/.test(String(session)) || !Number.isSafeInteger(sessionNumber) ||
+            sessionNumber <= 0 || sessionNumber * 1000 > now + 300000 ||
+            now - sessionNumber * 1000 > 86400000) {
+          quoteIdentity = null;
+        } else { quoteIdentity = {client: String(client), session: String(session), received: now}; }
+        updateQuoteReferences();
+      });
+    });
+  }
+
+  // Keep normal anchor navigation. If the tag is blocked or not ready, quotes
+  // still open without a reference and no completed analytics event is sent.
+  ['pointerover', 'pointerdown', 'focusin'].forEach(type => {
+    document.addEventListener(type, event => {
+      if (event.target.closest('a[data-action="quote_form_open"]')) prepareQuoteReferences();
+    });
+  });
+  ['click', 'auxclick', 'contextmenu'].forEach(type => {
+    document.addEventListener(type, event => {
+      if (!event.target.closest('a[data-action="quote_form_open"]')) return;
+      updateQuoteReferences();
+      prepareQuoteReferences();
+    }, true);
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') { updateQuoteReferences(); prepareQuoteReferences(); }
+  });
+
   function startAnalytics() {
     if (!enabled || choice !== 'granted' || started || !trackable) return;
     started = true;
@@ -120,6 +195,7 @@
     window.gtag('js', new Date());
     window.gtag('config', id, {
       ...campaign,
+      ...(new URLSearchParams(location.search).get('quote_tracking_test') === '1' ? {debug_mode: true} : {}),
       send_page_view: true, page_location: cleanURL, page_title: document.title,
       page_referrer: referrer,
       allow_google_signals: false, allow_ad_personalization_signals: false,
@@ -128,8 +204,9 @@
     const tag = document.createElement('script');
     tag.async = true;
     tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
-    tag.addEventListener('error', () => { loadFailed = true; tellVisitor(); });
+    tag.addEventListener('error', () => { loadFailed = true; clearQuoteReferences(); tellVisitor(); });
     document.head.append(tag);
+    prepareQuoteReferences();
   }
 
   function closeDialog() {
@@ -146,6 +223,7 @@
     remember(next);
     if (next === 'granted') { try { sessionStorage.removeItem('shaam.analytics-denied'); } catch (_) { /* Storage optional. */ } }
     if (next === 'denied') {
+      clearQuoteReferences();
       window['ga-disable-' + id] = true;
       clearAnalyticsCookies();
       tellVisitor();
@@ -203,6 +281,7 @@
     if (next === choice) return;
     choice = next;
     if (choice !== 'granted' && started) {
+      clearQuoteReferences();
       window['ga-disable-' + id] = true;
       clearAnalyticsCookies();
       location.reload();
