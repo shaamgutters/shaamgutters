@@ -4,26 +4,23 @@ Section: `/homeowner-guides/`
 
 First article: `/homeowner-guides/gutter-repair-or-replacement-regina/`
 
-Status: draft, awaiting the owner's selected photos. Do not merge this draft to the publishing branch until the photos are supplied and integrated. No stock or AI photos are authorized for these articles.
+Status: ready for publication with the owner's three supplied Regina property photos, received October 17, 2026.
 
-## Photos needed for the first article
+## Photo provenance
 
-1. A wide, clear photo of a completed gutter installation for the article opening, guide card and social preview.
-2. A close-up of a gutter, downspout or fascia detail to support the inspection advice.
-3. An optional before photo showing the issue. Use a before/after comparison only if the owner confirms both photos show the same project.
+- `IMG_6259(1).jpeg`: white gutter and downspout at a Regina roof corner, used in the article opening and guide card.
+- `IMG_6257.jpeg`: white gutter corner, fascia and vented soffit, used beside the repair discussion.
+- `WhatsApp Image 2026-06-14 at 7.51.50 PM (4).jpeg`: dark roof-edge details above exterior work in progress, used beside the fascia discussion and for the social preview.
 
-Ask for the city, work completed and the issue shown. Do not infer a job location, drainage outcome, gutter size, price or customer testimonial from a photo. Do not expose a customer's address in a caption.
+The owner confirmed the photos show Regina properties. Captions describe visible details without claiming a specific job scope, repair result, defect, customer address or before/after sequence. The original uploads remain unchanged. Website copies preserve proportions and use responsive WebP sizes, explicit dimensions, alt text and loading priorities. The article has all three images in its BlogPosting metadata.
 
-The article contains two HTML comment markers for the supplied photos. Insert actual `<figure>` elements after inspecting the files, with factual alt text and captions. Create appropriately sized WebP copies, set width/height and responsive srcset. Load the first image eagerly and later images lazily. Add the chosen image to BlogPosting `image`, Open Graph and Twitter metadata; add image dimensions and alternative text. Article text currently stands on its own without broken image URLs or visible placeholders.
+## Publication checks
 
-## Publication
-
-- Check the final content with Abdul and integrate the supplied photos.
-- Set the visible publication date, `datePublished`, `dateModified` and sitemap lastmod to the actual publication date.
-- Keep exactly one H1, a unique title and description, self-referencing canonical, breadcrumb and BlogPosting JSON-LD.
-- Recompute the inline JSON-LD CSP SHA-256 if the JSON-LD changes.
-- Check mobile layout, all local links, contact actions, photo loading and consent controls.
-- Merge and confirm GitHub Pages deployment, then inspect the live URLs.
+- One H1 per page, distinct title and description, self-referencing canonical, breadcrumb and BlogPosting JSON-LD.
+- CSP SHA-256 recomputed for inline JSON-LD.
+- Local links, article anchors, image files, responsive dimensions and sitemap entries checked.
+- Browser visual QA unavailable in this environment. Responsive styles reviewed statically.
+- Publish through the existing GitHub Pages repository, then verify deployment and live URLs.
 - Request indexing in Search Console after publication. An indexing request does not guarantee inclusion or ranking.
 
 ## Future articles
