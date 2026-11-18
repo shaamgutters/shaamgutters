@@ -1,4 +1,4 @@
-/* Campaign location landing pages (/lp/<city>/). Loaded after site.css and reuses its tokens. */
+/* Campaign location landing pages (/service-areas/<city>/). Loaded after site.css and reuses its tokens. */
 .lp{--lp-shadow:0 24px 50px #0c1c3626}
 /* Typography mirrors site.css (same families, sizes and weights as the live pages). */
 .lp .lead{color:var(--muted)}
