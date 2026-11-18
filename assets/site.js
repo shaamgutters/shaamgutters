@@ -34,6 +34,15 @@
       if (menuWasOpen) toggle.focus();
     });
     desktop.addEventListener('change', closeNav);
+    // Only one header dropdown open at a time (Services / Service Areas).
+    document.querySelectorAll('.nav-list details').forEach(d => {
+      d.addEventListener('toggle', () => {
+        if (!d.open) return;
+        document.querySelectorAll('.nav-list details[open]').forEach(other => {
+          if (other !== d) other.open = false;
+        });
+      });
+    });
   }
   document.querySelectorAll('[data-year]').forEach(node => { node.textContent = String(Math.max(2026, new Date().getFullYear())); });
   // These browser events are optional integration hooks, not lead or call counts.
