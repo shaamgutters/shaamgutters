@@ -1,4 +1,14 @@
 User-agent: *
-Allow: /
-
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Disallow: /wp-includes/
+Allow: /wp-includes/js/
+Allow: /wp-includes/css/
+Allow: /wp-includes/images/
+Disallow: /wp-login.php
+Disallow: /wp-register.php
+Disallow: /tag/*
+Disallow: /author/*
+Disallow: */?s*
+Disallow: */page/*
 Sitemap: https://shaamgutters.ca/sitemap.xml
